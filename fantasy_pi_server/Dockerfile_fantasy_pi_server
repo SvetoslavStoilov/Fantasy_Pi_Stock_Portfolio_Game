@@ -1,0 +1,13 @@
+FROM python:3.7.5-slim-buster
+
+ENV INSTALL_PATH /fantasy_pi_server
+RUN mkdir -p $INSTALL_PATH
+
+COPY requirements.txt requirements.txt
+COPY . .
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+
+CMD gunicorn -b 0.0.0.0:8000 --access-logfile - "fantasy_pi_server.app"

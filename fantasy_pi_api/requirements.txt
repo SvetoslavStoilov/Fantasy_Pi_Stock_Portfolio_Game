@@ -1,0 +1,8 @@
+certifi==2019.11.28
+chardet==3.0.4
+idna==2.8
+pg8000==1.13.2
+pgtoolbox
+requests==2.22.0
+scramp==1.1.0
+urllib3==1.25.8

@@ -1,0 +1,7 @@
+FROM postgres:12.1
+
+
+RUN mkdir /db_schema
+COPY . /docker-entrypoint-initdb.d
+
+EXPOSE 5432

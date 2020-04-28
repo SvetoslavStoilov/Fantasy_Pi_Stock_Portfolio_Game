@@ -1,0 +1,68 @@
+version: "3.7"
+services:
+  fantasy_pi_db:
+    build:
+      dockerfile: ./Dockerfile_fantasy_pi_db
+      context: ./fantasy_pi_db
+    image: fantasy_pi_db
+    container_name: fantasy_pi_db_c1
+    networks:
+      - internal_network
+    volumes:
+      - ./fantasy_pi_db:/docker-entrypoint-initdb.d/
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    expose: [5432]
+  # fantasy_pi_jenkins:
+  #   build:
+  #     dockerfile: ./Dockerfile_fantasy_pi_jenkins
+  #     context: ./fantasy_pi_jenkins
+  #   image: fantasy_pi_jenkins
+  #   container_name: fantasy_pi_jenkins_c1
+  #   networks:
+  #     - internal_network
+  #   volumes:
+  #     - ./data_jenkins:/var/jenkins_home
+  #   env_file:
+  #     - ./config.env
+  #   ports:
+  #     - "8080:8080"
+  #   expose: [8080]
+  fantasy_pi_server:
+    build:
+      dockerfile: Dockerfile_fantasy_pi_server
+      context: ./fantasy_pi_server
+    image: fantasy_pi_server
+    container_name: fantasy_pi_server_c1
+    networks:
+      - internal_network
+    # entrypoint: python3 fantasy_pi_server/app.py
+    working_dir: /fantasy_pi_server
+    command: >
+      gunicorn -b 0.0.0.0:8000 --access-logfile - "fantasy_pi_server.app:create_app()"
+
+    volumes:
+      - ./fantasy_pi_server:/fantasy_pi_server
+    env_file:
+      - ./config.env
+    ports:
+      - "8000:8000"
+  # fantasy_pi_api:
+  #   build:
+  #     dockerfile: Dockerfile_fantasy_pi_api
+  #     context: ./fantasy_pi_api
+  #   image: fantasy_pi_api
+  #   container_name: fantasy_pi_api_c1
+  #   networks:
+  #     - internal_network
+  #   volumes:
+  #     - ./fantasy_pi_api:/fantasy_pi_api
+  #   env_file:
+  #     - ./config.env
+  #   ports:
+  #     - "5555:5555"
+
+networks:
+  internal_network:
+    driver: bridge
