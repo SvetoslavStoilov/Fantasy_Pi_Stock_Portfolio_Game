@@ -3,6 +3,6 @@ werkzeug>=0.14.1
 gunicorn>=19.4.5
 pg8000>=1.13.2
 pgtoolbox
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 requests==2.22.0
 
